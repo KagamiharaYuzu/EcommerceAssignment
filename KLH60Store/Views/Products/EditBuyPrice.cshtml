@@ -1,0 +1,44 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = $"Edit Buy Price for {Model.Description}";
+    string err = TempData["Err"] is not null ? TempData["Err"].ToString() : "";
+}
+
+<h1>Edit Buy Price For: @Model.Description</h1>
+
+<p class="global-err">@err</p>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditBuyPrice">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProductId" />
+            <input type="hidden" asp-for="ProdCatId" />
+            <input type="hidden" asp-for="Description" class="form-control" />
+            <input type="hidden" asp-for="Manufacturer" class="form-control" />
+            <input type="hidden" asp-for="Stock" class="form-control" />
+            <div class="form-group">
+                <label class="control-label">Current Buy Price: @Model.BuyPrice</label>
+                <input type="number" asp-for="BuyPrice" class="form-control" />
+                <span asp-validation-for="BuyPrice" class="text-danger"></span>
+                @if (err.Length > 0)
+                {
+                    <span class="text-danger">@err</span>
+                }
+            </div>
+            <input type="hidden" asp-for="SellPrice" class="form-control" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

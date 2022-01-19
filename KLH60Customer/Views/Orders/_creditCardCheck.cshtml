@@ -1,0 +1,29 @@
+﻿@model Customer
+@{
+    string msg = ViewData["ccCheck"] is not null ? ViewData["ccCheck"].ToString() : "";
+
+}
+<h4>Credit Card Check</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CheckCreditCard">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CreditCard" class="control-label"></label>
+                <input type="number" asp-for="CreditCard" class="form-control" name="cc" maxlength="16" min="100000000000" max="9999999999999999" />
+                @if (msg.Length > 0)
+                {
+                    <span class="text-info">@msg</span>
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

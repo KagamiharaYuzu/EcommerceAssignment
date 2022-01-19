@@ -1,0 +1,42 @@
+﻿@page "/products"
+
+<h3>All Products Organized by Category</h3>
+<hr />
+@if (productList != null)
+{
+    foreach (var cat in categories)
+    {
+        <h4>@cat.ProdCat</h4>
+        <hr />
+        ProductsInCategory(cat.CategoryId);
+        <div class="row">
+            @foreach (var product in sortedList)
+            {
+                <ProductDisplay prod="product" />
+            }
+        </div>
+    }
+}
+else
+{
+    <p><em>Loading data please wait...</em></p>
+}
+
+@code {
+    private IEnumerable<Product> productList;
+    private IEnumerable<ProductCategory> categories;
+    private IEnumerable<Product> sortedList;
+
+    private async Task Setup()
+    {
+        productList = await new Product().GetAllProducts();
+        categories = (await new ProductCategory().GetAllCategories()).OrderBy(cat => cat.ProdCat);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Setup();
+    }
+
+    private IEnumerable<Product> ProductsInCategory(int catId) => sortedList = productList.Where(prod => prod.ProdCatId == catId).OrderBy(prod => prod.Description);
+}

@@ -1,0 +1,14 @@
+﻿@model IEnumerable<ProductDTO>
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<h1>Search results for "@ViewData["search"]"</h1>
+
+<div class="row">
+    @foreach (var prod in Model)
+    {
+        <partial name="_ProdPerCatList" model="prod" />
+    }
+</div>

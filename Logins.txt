@@ -1,0 +1,3 @@
+Customer: cust@cust.com password:1234
+clerk: clerk@clerk.com  password:1234
+Manager: manager@manager.com password: 1234

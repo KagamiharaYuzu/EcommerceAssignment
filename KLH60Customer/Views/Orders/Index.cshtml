@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Your Orders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateFulfiled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Taxes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    @if (item.DateFulfiled.Value.Year == 1970)
+                    {<span>Order has not yet been fulfilled</span> }
+                    else
+                    { @Html.DisplayFor(modelItem => item.DateFulfiled)}
+                </td>
+                <td>
+                    @item.Total.Value.ToString("C", CultureInfo.CurrentCulture)
+                </td>
+                <td>
+                    @item.Taxes.Value.ToString("C", CultureInfo.CurrentCulture)
+                </td>
+                <td>
+                    @if (item.DateFulfiled.Value.Year == 1970)
+                    {
+                        <a asp-action="CheckCreditCard" asp-route-orderId="@item.OrderId">Place Order</a> <span>|</span>
+                    }
+                    <a asp-action="Summary" asp-route-id="@item.OrderId">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,31 @@
+﻿@model Product
+<div class="row g-0">
+    <div class="col-md-12">
+        <div class="card-header text-white bg-info">
+            <p class="card-text">
+                <h5 class="card-title">
+                    @Model.Description
+                </h5>
+            </p>
+        </div>
+    </div>
+    @*<div class="col-md-6">
+            <img src="@item.ImageURL" width="100%" alt="@item.Name"> eventually...
+        </div>
+            pictures later
+    *@
+    <div class="col-md-12">
+        <div class="card-body">
+            <p class="card-text"><b>Manufacturer: </b>@Model.Manufacturer</p>
+            <p class="card-text"><b>Stock: </b>@Model.Stock </p>
+            <p class="card-text"><b>Price: </b>$@Model.SellPrice.ToString()</p>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card-footer ">
+            <p class="card-text">
+                <a asp-action="AddToCart" asp-controller="ShoppingCarts" asp-route-id="@Model.ProductId" class="btn btn-danger text-white">Add to Cart</a>
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+﻿@page "/products/edit/{id}"
+@using System.Net
+@using Newtonsoft.Json
+@if (product != null)
+{
+    <h3>Editing @product.Description</h3>
+
+    <EditForm Model="product" OnValidSubmit="Edit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group row">
+            <label for="description" class="col-sm-2 col-form-label">Description</label>
+            <InputText id="description" class="form-control" placeholder="Product Description" @bind-Value="product.Description" />
+            <ValidationMessage For="@(()=>product.Description)" />
+        </div>
+        <div class="form-group row">
+            <label for="category" class="col-sm-2 col-form-label">Category</label>
+            <CustomInputSelect id="category" class="form-control" @bind-Value="product.ProdCatId">
+                @foreach (var cat in categories)
+                    {
+                    <option value="@cat.CategoryId">@cat.ProdCat</option>
+                    }
+            </CustomInputSelect>
+        </div>
+        <div class="form-group row">
+            <label for="manufacturer" class="col-sm-2 col-form-label">Manufacturer</label>
+            <InputText id="manufacturer" class="form-control" placeholder="Product Manufacturer" @bind-Value="product.Manufacturer" />
+            <ValidationMessage For="@(()=>product.Manufacturer)" />
+        </div>
+        <div class="form-group row">
+            <label for="stock" class="col-sm-2 col-form-label">Stock</label>
+            <InputNumber id="stock" class="form-control" placeholder="Product Stock" @bind-Value="product.Stock" />
+            <ValidationMessage For="@(()=>product.Stock)" />
+        </div>
+        <div class="form-group row">
+            <label for="buy" class="col-sm-2 col-form-label">Buy price</label>
+            <InputNumber id="buy" class="form-control" placeholder="Product Buy price" @bind-Value="product.BuyPrice" />
+            <ValidationMessage For="@(()=>product.BuyPrice)" />
+        </div>
+        <div class="form-group row">
+            <label for="sell" class="col-sm-2 col-form-label">Sell price</label>
+            <InputNumber id="sell" class="form-control" placeholder="Product Sell Price" @bind-Value="product.SellPrice" />
+            <ValidationMessage For="@(()=>product.SellPrice)" />
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </EditForm>
+    if (result != null)
+    {
+        <hr />
+        <p>@result</p>
+    }
+}
+else
+{
+    <p>Loading Product Details...</p>
+}
+@code {
+    [Parameter]
+    public string id { get; set; }
+    private Product product { get; set; }
+    private IEnumerable<ProductCategory> categories { get; set; }
+    public string result { get; set; }
+
+    [Inject]
+    public NavigationManager NavManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await new Product().GetProduct(int.Parse(id));
+        categories = await new ProductCategory().GetAllCategories();
+    }
+    private async Task Edit()
+    {
+        HttpResponseMessage res;
+        try
+        {
+            res = await product.UpdateEntireProduct();
+            switch (res.StatusCode)
+            {
+                case HttpStatusCode.NoContent:
+                    NavManager.NavigateTo("/products");
+                    break;
+
+                case HttpStatusCode.BadRequest:
+                case HttpStatusCode.InternalServerError:
+                    string err = await res.Content.ReadAsStringAsync();
+                    result = err.Substring(err.IndexOf(":") + 1, err.IndexOf("\r\n") - err.IndexOf(":"));
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            result = e.Message;
+        }
+    }
+}

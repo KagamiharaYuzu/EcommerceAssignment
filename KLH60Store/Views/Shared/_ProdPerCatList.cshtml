@@ -1,0 +1,39 @@
+﻿@model ProductDTO
+<div class="col-md-4 col-xs-6 border-primary mb-3">
+    <div class="card mb-3 product-card">
+        <div class="row g-0">
+            <div class="col-md-12">
+                <div class="card-header text-white bg-info">
+                    <p class="card-text">
+                        <h5 class="card-title">
+                            @Model.Description
+                            <a asp-action="Edit" asp-route-id="@Model.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a>
+                        </h5>
+                    </p>
+                </div>
+            </div>
+            @*<div class="col-md-6">
+                    <img src="@item.ImageURL" width="100%" alt="@item.Name"> eventually...
+                </div>
+                    pictures later
+            *@
+            <div class="col-md-8">
+                <div class="card-body">
+                    <p class="card-text"><b>Category: </b>@Model.CategoryName</p>
+                    <p class="card-text"><b>Manufacturer: </b>@Model.Manufacturer</p>
+                    <p class="card-text"><b>Stock: </b>@Model.Stock<a asp-action="EditStock" asp-route-id="@Model.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a></p>
+                    <p class="card-text"><b>Sell Price: </b>@Model.SellPrice.ToString("C", CultureInfo.CurrentCulture)<a asp-action="EditSellPrice" asp-route-id="@Model.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a></p>
+                    <p class="card-text"><b>Buy Price: </b>@Model.BuyPrice.ToString("C", CultureInfo.CurrentCulture)<a asp-action="EditBuyPrice" asp-route-id="@Model.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a></p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card-footer ">
+                    <p class="card-text">
+                        <a asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-outline-primary float-right"><i class="bi bi-eye-fill"></i> Show Details</a>
+                        <a asp-action="Delete" asp-route-id="@Model.ProductId" class="btn btn-danger text-white float-left">Delete</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

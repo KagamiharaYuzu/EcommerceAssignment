@@ -1,0 +1,53 @@
+﻿@page "/search/ordersbydate"
+<h3>Order List By Date</h3>
+<EditForm Model="search" OnValidSubmit="Search">
+    <InputDate id="date" @bind-Value="search.Date" />
+    <button type="submit">Search</button>
+</EditForm>
+@if (orders != null)
+{
+    if (orders.Any())
+    {
+        <div class="table-responsive table-hover">
+            <table class="table">
+                <tr>
+                    <th>Order Number</th>
+                    <th>Order Total</th>
+                    <th>Order Taxes</th>
+                </tr>
+                @foreach (var ord in orders)
+                {
+                    <tr>
+                        <td>@ord.OrderId</td>
+                        <td>@ord.Total.Value.ToString("C", CultureInfo.CurrentCulture)</td>
+                        <td>@ord.Taxes.Value.ToString("C", CultureInfo.CurrentCulture)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+    else
+    {
+        <p><em>No Orders were found for the date specified.</em></p>
+    }
+}
+else
+{
+    <p><em>Loading results, Please wait...</em></p>
+}
+@code {
+    private IEnumerable<Order> orders { get; set; }
+    private Search search { get; set; }
+    private Order order { get; set; }
+
+    protected override void OnInitialized()
+    {
+        order = new();
+        search = new();
+        orders = new List<Order>();
+    }
+    private async Task Search()
+    {
+        orders = await order.GetOrdersByDate(search.Date);
+    }
+}

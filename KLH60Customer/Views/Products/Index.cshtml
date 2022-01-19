@@ -1,0 +1,15 @@
+﻿@model IEnumerable<ProductDTO>
+
+@{
+    ViewData["Title"] = "Viewing All Products";
+}
+
+<h1 class="welcome-msg">Welcome to Yuzu's Otaku Paradise!!!</h1>
+<hr />
+<div class="row">
+    @foreach (var prodDTO in Model)
+    {
+        <partial name="_ProdPerCatList" model="prodDTO" />
+        <hr />
+    }
+</div>

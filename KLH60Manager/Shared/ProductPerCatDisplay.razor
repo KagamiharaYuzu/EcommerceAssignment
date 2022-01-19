@@ -1,0 +1,41 @@
+﻿<div class="col-md-4 col-xs-6 border-primary mb-3">
+    <div class="card mb-3 product-card">
+        <div class="row g-0">
+            <div class="col-md-12">
+                <div class="card-header text-white bg-info">
+                    <p class="card-text">
+                        <h5 class="card-title">
+                            @prodPerCat.Product.Description
+                        </h5>
+                    </p>
+                </div>
+            </div>
+            @*<div class="col-md-6">
+                    <img src="@item.ImageURL" width="100%" alt="@item.Name"> eventually...
+                </div>
+                    pictures later
+            *@
+            <div class="col-md-6">
+                <div class="card-body">
+                    <p class="card-text"><b>Category: </b>@prodPerCat.CategoryName</p>
+                    <p class="card-text"><b>Manufacturer: </b>@prodPerCat.Product.Manufacturer</p>
+                    <p class="card-text"><b>Stock: </b>@prodPerCat.Product.Stock<a href="products/editstock/@prodPerCat.Product.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a></p>
+                    <p class="card-text"><b>Buy Price: </b>@prodPerCat.Product.BuyPrice.Value.ToString("C", CultureInfo.CurrentCulture)<a href="products/editprices/@prodPerCat.Product.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a></p>
+                    <p class="card-text"><b>Sell Price: </b>@prodPerCat.Product.SellPrice.Value.ToString("C", CultureInfo.CurrentCulture)<a href="products/editprices/@prodPerCat.Product.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a></p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card-footer ">
+                    <p class="card-text">
+                        <a href="products/edit/@prodPerCat.Product.ProductId" class="btn btn-primary text-white">Edit Product</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ProductsPerCategory prodPerCat { get; set; }
+}

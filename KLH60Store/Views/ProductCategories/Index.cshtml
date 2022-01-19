@@ -1,0 +1,16 @@
+﻿@model IEnumerable<ProductCategory>
+
+@{
+    ViewData["Title"] = "Product Categories";
+}
+
+<h1>Viewing All Categories</h1>
+
+<p>Create New Category ┏ (゜ω゜)=☞</p><a asp-action="Create">Create Category Form</a>
+
+<p>
+    @foreach (var item in Model)
+    {
+        <span>     |     <a asp-action="ProductsInCategory" asp-controller="Products" asp-route-catId="@item.CategoryId">@item.ProdCat</a>     |     </span>
+    }
+</p>

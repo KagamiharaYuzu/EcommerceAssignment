@@ -1,0 +1,78 @@
+﻿@page "/customer/orders"
+<h3>Check Customer Orders</h3>
+<hr />
+@if(customers != null)
+{
+<EditForm Model="cust" OnValidSubmit="search">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <CustomInputSelect id="customer" class="form-control" @bind-Value="cust.CustomerId">
+        @foreach (var customer in customers)
+            {
+            <option value="@customer.CustomerId">@customer.LastName, @customer.FirstName</option>
+            }
+    </CustomInputSelect>
+    <button type="submit">Get Orders</button>
+</EditForm>
+}
+else{
+    <p><em>Loading Form...</em></p>
+}
+@if (custOrders != null)
+{
+    if (custOrders.Any())
+    {
+        <div class="table-responsive table-hover">
+            <table class="table">
+                <tr>
+                    <th>Order Number</th>
+                    <th>Order Total</th>
+                    <th>Order Taxes</th>
+                </tr>
+                @foreach (var ord in custOrders)
+                {
+                    <tr>
+                        <td>@ord.OrderId</td>
+                        <td>@ord.Total.Value.ToString("C", CultureInfo.CurrentCulture)</td>
+                        <td>@ord.Taxes.Value.ToString("C", CultureInfo.CurrentCulture)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+    else
+    {
+        <p><em>No orders found for the customer specified.</em></p>
+        <p>@result</p>
+    }
+}
+else
+{
+    <p><em>Loading data please wait....</em></p>
+}
+
+@code {
+    private IEnumerable<Customer> customers { get; set; }
+    private IEnumerable<Order> custOrders { get; set; }
+    private Customer cust { get; set; } = new();
+    public string result { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        cust = new();
+        customers = (await new Customer().GetCustomers()).OrderBy(cust => cust.LastName).ThenBy(cust => cust.FirstName);
+        custOrders = new List<Order>();
+    }
+
+    private async Task search()
+    {
+        try
+        {
+            custOrders = await new Order() { OrderCustId = cust.CustomerId }.GetCustomerOrders();
+        }
+        catch (Exception e)
+        {
+            result = e.Message;
+        }
+    }
+}

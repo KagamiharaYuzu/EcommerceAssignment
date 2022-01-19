@@ -1,0 +1,57 @@
+﻿@page "/search/products"
+<h3>Searching Products</h3>
+
+<EditForm Model="search" OnValidSubmit="Search">
+    <InputText id="term" @bind-Value="search.Term" placeholder="Search Product" />
+    <button type="submit">Search</button>
+</EditForm>
+@if (matchingProducts != null)
+{
+    if (matchingProducts.Any())
+    {
+        <div class="row">
+            @foreach (var product in matchingProducts)
+            {
+                <ProductDisplay prod="product" />
+            }
+        </div>
+    }
+    else
+    {
+        <p><em>No products were found.</em></p>
+    }
+    if (result != null)
+    {
+        <p><em>@result</em></p>
+    }
+}
+else
+{
+    <p><em>Loading data, please wait...</em></p>
+}
+@code {
+    // https://www.youtube.com/watch?v=_JxC6EUxbDo
+    private Product product { get; set; }
+    private IEnumerable<Product> matchingProducts { get; set; }
+    private Search search { get; set; }
+    private string result { get; set; }
+
+    protected override void OnInitialized()
+    {
+        product = new();
+        search = new();
+        matchingProducts = new List<Product>();
+    }
+
+    private async Task Search()
+    {
+        try
+        {
+            matchingProducts = await product.SearchProduct(search.Term);
+        }
+        catch (Exception e)
+        {
+            result = e.Message;
+        }
+    }
+}

@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Viewing Listed Products";
+}
+
+<h1 class="welcome-msg">Welcome to Yuzu's Otaku Paradise!!!</h1>
+<hr />
+<div class="row">
+    @foreach (Product prod in Model)
+    {
+        <div class="col-md-4 col-xs-6 border-primary mb-3">
+            <div class="card mb-3 product-card">
+                <partial name="_productDetails" model="prod" />
+            </div>
+        </div>
+
+    }
+</div>

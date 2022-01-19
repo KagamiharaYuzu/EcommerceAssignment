@@ -1,0 +1,39 @@
+﻿<div class="col-md-4 col-xs-6 border-primary mb-3">
+    <div class="card mb-3 product-card">
+        <div class="row g-0">
+            <div class="col-md-12">
+                <div class="card-header text-white bg-info">
+                    <p class="card-text">
+                        <h5 class="card-title">
+                            @prod.Description
+                        </h5>
+                    </p>
+                </div>
+            </div>
+            @*<div class="col-md-6">
+                    <img src="@item.ImageURL" width="100%" alt="@item.Name"> eventually...
+                </div>
+                pictures later*@
+            <div class="col-md-10">
+                <div class="card-body">
+                    <p class="card-text"><b>Manufacturer: </b>@prod.Manufacturer</p>
+                    <p class="card-text"><b>Stock: </b>@prod.Stock <a href="products/editstock/@prod.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a></p>
+                    <p class="card-text"><b>Buy Price: </b>@prod.BuyPrice.Value.ToString("C", CultureInfo.CurrentCulture)<a href="products/editprices/@prod.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a></p>
+                    <p class="card-text"><b>Sell Price: </b>@prod.SellPrice.Value.ToString("C", CultureInfo.CurrentCulture)<a href="products/editprices/@prod.ProductId" class="text-white float-right"><i class="bi bi-pencil-square"></i></a></p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card-footer ">
+                    <p class="card-text">
+                        <a href="products/edit/@prod.ProductId" class="btn btn-primary text-white">Edit Product</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Product prod { get; set; }
+}

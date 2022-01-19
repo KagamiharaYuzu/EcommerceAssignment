@@ -1,0 +1,20 @@
+﻿@model IEnumerable<ProductDTO>
+
+@{
+    ViewData["Title"] = "Viewing All Products";
+}
+
+<h1 class="welcome-msg">Welcome to Yuzu's Otaku Paradise!!!</h1>
+<p>this is the home page and where all the products are listed in alphabetial order and by category.</p>
+<hr />
+
+<p>
+    <a asp-action="Create">┏ (゜ω゜)=☞Add a new product</a>
+</p>
+<br />
+<div class="row">
+    @foreach (var prod in Model)
+    {
+        <partial name="_ProdPerCatList" model="prod" />
+    }
+</div>

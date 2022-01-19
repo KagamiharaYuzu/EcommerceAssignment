@@ -1,0 +1,79 @@
+﻿@model IEnumerable<CartItemDisplay>
+
+@{
+    ViewData["Title"] = "ShoppingCart";
+    int cartId = (int)ViewData["cart"];
+    decimal totalNoTax = ViewData["total"] is not null ? decimal.Parse(ViewData["total"].ToString()) : 0.0m;
+    string modelErr = TempData["modelError"] is not null ? TempData["modelError"].ToString() : "";
+    string ok = TempData["ok"] is not null ? TempData["ok"].ToString() : "";
+    string genErr = TempData["Error"] is not null ? TempData["Error"].ToString() : "";
+}
+
+<h1>Your Shopping Cart</h1>
+<p>@modelErr <br /> @genErr</p>
+<p>@ok</p>
+@if (Model.Any())
+{<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ItemDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Item.Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Item.Price)
+                </th>
+                <th>Total Cost Before Tax</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ci in Model)
+            {
+                Dictionary<string, string> cartitemDict = new()
+                {
+                        { "cartItemId", ci.Item.CartItemId.ToString() },
+                        { "cartId", ci.Item.CartId.ToString() },
+                        { "productId", ci.Item.ProductId.ToString() },
+                        { "price", ci.Item.Price.ToString() }
+                    };
+                <tr>
+                    <td>
+                        @ci.ItemDescription
+                    </td>
+                    <td>
+                        <form asp-controller="CartItems" asp-action="UpdateItem" asp-all-route-data="cartitemDict">
+                            <input type="hidden" asp-for="@ci.Item.CartItemId" name="id" />
+                            <input type="number" name="Newquantity" asp-for="@ci.Item.Quantity" step="1" />
+                            <input type="submit" value="Update" />
+                        </form>
+                        <form asp-controller="CartItems" asp-action="Delete" asp-route-id="@ci.Item.CartItemId">
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                    <td>
+                        @ci.Item.Price
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>The total for your order is: </td>
+                <td></td>
+                <td></td>
+                <td>@(decimal.Round(totalNoTax, 2, MidpointRounding.AwayFromZero).ToString("C", CultureInfo.CurrentCulture))</td>
+            </tr>
+        </tbody>
+    </table>
+    <form asp-controller="Orders" asp-action="Checkout">
+        <p>
+            <input type="hidden" name="cartId" asp-for="@cartId" />
+            <input type="hidden" name="totalNoTax" asp-for="@totalNoTax" />
+            <input type="submit" class="btn btn-primary" value="Checkout" />
+        </p>
+    </form>
+}
+else
+{
+    <p>@ViewData["noItems"].ToString()</p>
+}

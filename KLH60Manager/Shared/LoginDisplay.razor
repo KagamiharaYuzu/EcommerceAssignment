@@ -1,0 +1,38 @@
+﻿@if (username != "Login")
+{
+    <span>Hello, @username!</span>
+    <a href="#" @onclick="Clear">Logout</a>
+}
+else
+{
+    <a href="/login">Login</a>
+}
+@code{
+    private string username { get; set; }
+    [Inject]
+    private ISessionStorageService Session { get; set; }
+    [Inject]
+    private NavigationManager _nav { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            bool isLogedIn = await Session.ContainKeyAsync("username");
+            if (isLogedIn)
+                username = await Session.GetItemAsStringAsync("username");
+            else username = "Login";
+            StateHasChanged();
+        }
+        else
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async void Clear()
+    {
+        await Session.ClearAsync();
+        _nav.NavigateTo("/", true);
+    }
+}

@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Http;
+@model IEnumerable<OrderItemDTO>
+@{
+    ViewData["Title"] = "PlaceOrder";
+    Order ord = (Order)ViewData["ord"];
+}
+
+<h1>Place Order</h1>
+<hr />
+<h2>Please check to make sure it's correct before placing it</h2>
+<hr />
+<h4>Summary</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @item.Price.ToString("C", CultureInfo.CurrentCulture)
+                </td>
+            </tr>
+        }
+    <tr>
+        <td>Total for the order including taxes is: </td>
+        <td></td>
+        <td></td>
+        <td>@((ord.Total.Value + ord.Taxes.Value).ToString("C", CultureInfo.CurrentCulture))</td>
+    </tr>
+    </tbody>
+</table>
+@{Dictionary<string, string> orderDict = new()
+    {
+                { "orderId", ord.OrderId.ToString() },
+                { "orderCustId", ord.OrderCustId.ToString() },
+                { "dateCreated", ord.DateCreated.ToString() },
+                { "dateCreatedJSON", ord.DateCreatedJSON },
+                { "dateFulfiled", DateTime.Now.ToString() },
+                { "dateFulfiledJSON", DateTime.Now.ToString() },
+                { "total", ord.Total.Value.ToString() },
+                { "taxes", ord.Taxes.Value.ToString() },
+            };
+}
+<form asp-action="PlaceOrder" asp-all-route-data="orderDict">
+    <input type="hidden" name="orderId" asp-for="@ord.OrderId" />
+    <input type="submit" value="Place Order" />
+</form>
