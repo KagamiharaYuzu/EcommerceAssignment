@@ -30,4 +30,4 @@ Almost the same as the manager project but the clerk of the store also has acces
 
 ### Store Class Library
 
-Class library with all the necessary Classes and methods used throughout the application. Here the CRUD methods call the ReST API with the localhost link as of now and it can be changed fairly easily as it's a static variable at the top.
+Class library with all the necessary Classes and methods used throughout the application. Here the CRUD methods call the ReST API with the localhost link as of now and it can be changed fairly easily as it's a static variable at the start of the class.
